@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFEPGS HACK PANEL</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), 
+                        url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00ff66;
+            overflow: hidden;
+        }
+
+        .panel {
+            background: rgba(10, 20, 15, 0.95);
+            border: 2px solid #00ff66;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.4);
+            border-radius: 12px;
+            width: 420px;
+            max-width: 90vw;
+            padding: 24px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 12px #00ff66;
+            font-size: 22px;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            margin: 15px 0 8px 0;
+            color: #88ffaa;
+            border-bottom: 1px dashed rgba(0, 255, 102, 0.4);
+            padding-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        input[type="text"], input[type="password"] {
+            flex: 1;
+            background: #05100a;
+            border: 1px solid #00ff66;
+            color: #00ff66;
+            padding: 10px 12px;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input::placeholder {
+            color: rgba(0, 255, 102, 0.4);
+        }
+
+        button {
+            background: #00ff66;
+            color: #000;
+            border: none;
+            padding: 10px 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: #00cc52;
+            box-shadow: 0 0 12px #00ff66;
+        }
+
+        .btn-launch {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            font-size: 15px;
+            background: linear-gradient(90deg, #00ff66, #00cc52);
+            color: #000;
+            letter-spacing: 1px;
+        }
+
+        .feature-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            background: rgba(0, 255, 102, 0.05);
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 255, 102, 0.15);
+        }
+
+        .feature-item span {
+            font-size: 14px;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #1a2e22;
+            transition: .3s;
+            border-radius: 24px;
+            border: 1px solid #00ff66;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #00ff66;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #00ff66;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+            background-color: #000;
+        }
+
+        .status-msg {
+            font-size: 13px;
+            text-align: center;
+            margin-top: 12px;
+            min-height: 18px;
+        }
+
+        /* Modal Select Game */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .modal-content {
+            background: rgba(10, 20, 15, 0.98);
+            border: 2px solid #00ff66;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.5);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            width: 320px;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 18px;
+            font-size: 18px;
+        }
+
+        .game-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 14px;
+            background: rgba(0, 255, 102, 0.1);
+            color: #00ff66;
+            border: 1px solid #00ff66;
+        }
+
+        .game-btn:hover {
+            background: #00ff66;
+            color: #000;
+        }
+
+        .btn-close {
+            background: transparent;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+            margin-top: 10px;
+        }
+
+        .btn-close:hover {
+            background: #ff4444;
+            color: #fff;
+            box-shadow: 0 0 10px #ff4444;
+        }
+
+        .admin-section {
+            display: none;
+            border: 1px solid #ffbb00;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            background: rgba(255, 187, 0, 0.05);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="panel">
+        <h2>FFEPGS HACK PANEL</h2>
+
+        <!-- Key Verification Screen -->
+        <div id="keyScreen">
+            <div class="section-title">กรอกคีย์เพื่อเข้าใช้งาน</div>
+            <div class="input-group">
+                <input type="password" id="keyInput" placeholder="ใส่ คีย์ ของคุณที่นี่...">
+                <button onclick="activateKey()">ยืนยันคีย์</button>
+            </div>
+        </div>
+
+        <!-- Main Features Menu (Hidden until key verified) -->
+        <div id="mainContent" class="hidden">
+            <!-- Admin Mode Login -->
+            <div class="section-title">ระบบผู้ดูแลระบบ (ADMIN)</div>
+            <div class="input-group">
+                <input type="password" id="adminInput" placeholder="ใส่รหัสผ่านแอดมิน...">
+                <button onclick="adminLogin()">เข้าสู่ระบบ</button>
+            </div>
+
+            <!-- Admin Special Controls -->
+            <div id="adminControls" class="admin-section">
+                <div class="section-title" style="color: #ffbb00; border-color: #ffbb00;">คำสั่งแอดมิน</div>
+                <div class="feature-item">
+                    <span>ปิดปรับปรุงชั่วคราว</span>
+                    <label class="switch">
+                        <input type="checkbox" id="maintSwitch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="feature-item">
+                    <span>ระบบอัพเดทฟังก์ชัน</span>
+                    <label class="switch">
+                        <input type="checkbox" id="updateSwitch" onchange="toggleUpdate(this)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Cheat Functions -->
+            <div class="section-title">ฟังก์ชันสคริปต์</div>
+            
+            <div class="feature-item">
+                <span>ดูดหัว 100%</span>
+                <label class="switch">
+                    <input type="checkbox" id="f1">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="feature-item">
+                <span>กันแบน 70%</span>
+                <label class="switch">
+                    <input type="checkbox" id="f2">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="feature-item">
+                <span>ช่วยล็อก 50%</span>
+                <label class="switch">
+                    <input type="checkbox" id="f3">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="feature-item">
+                <span>ดูดตัว 100%</span>
+                <label class="switch">
+                    <input type="checkbox" id="f4">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Game Launch Button -->
+            <button class="btn-launch" onclick="openGameModal()">เข้าสู่เกม FREE FIRE</button>
+        </div>
+
+        <div id="status" class="status-msg"></div>
+    </div>
+
+    <!-- Modal Select Game -->
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <h3>เลือกเวอร์ชันเกม</h3>
+            <button class="game-btn" onclick="launchGame('Free Fire ธรรมดา')">FREE FIRE ธรรมดา</button>
+            <button class="game-btn" onclick="launchGame('Free Fire MAX')">FREE FIRE MAX</button>
+            <button class="btn-close" onclick="closeGameModal()">ยกเลิก</button>
+        </div>
+    </div>
+
+    <script>
+        const VALID_KEY = "FFEFGS_HJI8975";
+        const ADMIN_PASS = "191";
+
+        function setStatus(msg, isSuccess = true) {
+            const status = document.getElementById('status');
+            status.style.color = isSuccess ? '#00ff66' : '#ff3333';
+            status.innerText = msg;
+        }
+
+        function activateKey() {
+            const inputKey = document.getElementById('keyInput').value.trim();
+            if (inputKey === VALID_KEY) {
+                document.getElementById('keyScreen').classList.add('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+                setStatus('ยืนยันคีย์สำเร็จ! ยินดีต้อนรับเข้าสู่ระบบพาแนล', true);
+            } else {
+                setStatus('คีย์ไม่ถูกต้อง! กรุณาตรวจสอบคีย์ของคุณอีกครั้ง', false);
+            }
+        }
+
+        function adminLogin() {
+            const pass = document.getElementById('adminInput').value.trim();
+            if (pass === ADMIN_PASS) {
+                document.getElementById('adminControls').style.display = 'block';
+                setStatus('เข้าสู่ระบบแอดมินสำเร็จ!', true);
+            } else {
+                setStatus('รหัสแอดมินไม่ถูกต้อง!', false);
+            }
+        }
+
+        function toggleUpdate(checkbox) {
+            if (checkbox.checked) {
+                setStatus('กำลังทำการอัปเดตระบบใหม่... กรุณารอสักครู่', true);
+                setTimeout(() => {
+                    setStatus('อัปเดตฟังก์ชันระบบสำเร็จ! พร้อมใช้งานเวอร์ชันล่าสุด', true);
+                }, 1500);
+            } else {
+                setStatus('ปิดการอัปเดตระบบแล้ว', true);
+            }
+        }
+
+        function openGameModal() {
+            document.getElementById('gameModal').style.display = 'flex';
+        }
+
+        function closeGameModal() {
+            document.getElementById('gameModal').style.display = 'none';
+        }
+
+        function launchGame(gameType) {
+            closeGameModal();
+            setStatus('กำลังเปิดตัวเกม ' + gameType + '...', true);
+        }
+    </script>
+</body>
+</html>
